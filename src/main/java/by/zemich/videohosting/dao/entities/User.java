@@ -38,5 +38,4 @@ public class User {
         channel.addSubscriber(this);
     }
 
-
 }

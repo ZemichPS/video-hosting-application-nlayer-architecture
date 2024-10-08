@@ -1,6 +1,7 @@
 package by.zemich.videohosting.interfaces.rest;
 
 import by.zemich.videohosting.interfaces.rest.handlers.CategoryHandler;
+import by.zemich.videohosting.interfaces.rest.handlers.UserHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.EnableWebFlux;
@@ -16,10 +17,10 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class RoutingConfiguration {
 
     @Bean
-    RouterFunction<ServerResponse> categoryRouteFunction(CategoryHandler handler) {
+    RouterFunction<ServerResponse> userRouteFunction(UserHandler handler) {
         RouterFunction<ServerResponse> route = route()
-                .path("api/v1/category", b1 -> b1.nest(
-                        accept(APPLICATION_JSON), b2-> b2.GET("/{id}", handler::getCategoryByUuid)
+                .path("api/v1/users", b1 -> b1.nest(
+                        accept(APPLICATION_JSON), b2-> b2.GET("/{user_id}", handler::subscribe)
                 ))
                 .build();
 

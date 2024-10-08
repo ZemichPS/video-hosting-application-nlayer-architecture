@@ -3,7 +3,6 @@ package by.zemich.videohosting.interfaces.rest.handlers;
 import by.zemich.videohosting.dao.entities.Category;
 import by.zemich.videohosting.service.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
