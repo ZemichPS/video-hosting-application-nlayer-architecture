@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.*;
@@ -11,6 +12,7 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
+@ToString(exclude = {"subscriptions"})
 public class User {
     @Setter(AccessLevel.NONE)
     @Id
@@ -18,7 +20,7 @@ public class User {
     private UUID id;
     private String username;
     private String name;
-    private String mail;
+    private String email;
 
     @Setter(AccessLevel.NONE)
     @OrderBy("title DESC")
