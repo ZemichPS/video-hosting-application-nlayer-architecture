@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class UserCreated {
+public class UseRepresentation {
     @org.hibernate.validator.constraints.UUID
     private UUID id;
     @NotBlank

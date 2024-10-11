@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: video-hosting
+
+  r2dbc:
+    url: jdbc:postgresql://localhost:5433/video_hosting
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    database: postgresql
+    show-sql: true
+
+server:
+  port: 8082
+

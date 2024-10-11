@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
+@Table(schema = "app")
 @Getter
 @Setter
 public class Channel {
@@ -20,6 +21,7 @@ public class Channel {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
     @Setter(AccessLevel.NONE)
     private User author;
 
@@ -31,7 +33,7 @@ public class Channel {
     @ManyToMany
     private Set<User> subscribers = new HashSet<>();
 
-    private String title;
+    private String name;
 
     private String description;
 
@@ -41,7 +43,7 @@ public class Channel {
 
     private String language;
 
-    private String avatarFileName;
+    private String avatar;
 
     public void assignCategory(Category category) {
         this.category = category;
@@ -49,5 +51,9 @@ public class Channel {
 
     public void addSubscriber(User user) {
         subscribers.add(user);
+    }
+
+    public void removeSubscriber(User user) {
+        subscribers.remove(user);
     }
 }

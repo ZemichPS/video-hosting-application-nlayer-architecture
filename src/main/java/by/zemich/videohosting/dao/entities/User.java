@@ -10,6 +10,7 @@ import org.hibernate.annotations.UuidGenerator;
 import java.util.*;
 
 @Entity
+@Table(schema = "app")
 @Getter
 @Setter
 @ToString(exclude = {"subscriptions"})
@@ -23,14 +24,14 @@ public class User {
     private String email;
 
     @Setter(AccessLevel.NONE)
-    @OrderBy("title DESC")
+    @OrderBy("name DESC")
     @ManyToMany(
             cascade = {CascadeType.MERGE, CascadeType.PERSIST},
             mappedBy = "subscriptions"
     )
     @JoinTable(
             name = "user_channel",
-            joinColumns = @JoinColumn(name = "id", referencedColumnName = "user_id"),
+            joinColumns = @JoinColumn(name = "user_id",  referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "channel_id")
     )
     private Set<Channel> subscriptions = new HashSet<>();
@@ -38,6 +39,11 @@ public class User {
     public void subscribe(Channel channel) {
         subscriptions.add(channel);
         channel.addSubscriber(this);
+    }
+
+    public void unsubscribe(Channel channel) {
+        subscriptions.remove(channel);
+        channel.removeSubscriber(this);
     }
 
 }

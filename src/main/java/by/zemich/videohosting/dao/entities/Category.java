@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Table(schema = "app")
 @Getter
 @Setter
 public class Category {
