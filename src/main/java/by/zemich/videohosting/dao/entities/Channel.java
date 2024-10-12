@@ -29,7 +29,7 @@ public class Channel {
     private Category category;
 
     @Setter(AccessLevel.NONE)
-    @ManyToMany
+    @ManyToMany(mappedBy = "subscriptions")
     private Set<User> subscribers = new HashSet<>();
 
     private String name;

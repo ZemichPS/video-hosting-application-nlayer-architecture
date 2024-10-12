@@ -1,6 +1,7 @@
 package by.zemich.videohosting.service;
 
 import by.zemich.videohosting.core.exceptions.CategoryNotFoundException;
+import by.zemich.videohosting.core.exceptions.ChannelNotFoundException;
 import by.zemich.videohosting.core.exceptions.UserNotFoundException;
 import by.zemich.videohosting.core.models.dto.request.ChannelData;
 import by.zemich.videohosting.core.models.dto.response.ChannelFullRepresentation;
@@ -39,4 +40,8 @@ public class ChannelServiceFacade {
 
     }
 
+    public void deleteById(UUID channelUuid) {
+        if(!channelCrudService.existsById(channelUuid)) throw new ChannelNotFoundException("Channel with id %s is nowhere to be found".formatted(channelUuid));
+        channelCrudService.deleteById(channelUuid);
+    }
 }

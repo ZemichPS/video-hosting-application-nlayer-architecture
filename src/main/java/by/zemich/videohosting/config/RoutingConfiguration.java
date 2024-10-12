@@ -66,7 +66,7 @@ public class RoutingConfiguration {
                         //.GET("/{category_id}", handler::findById)
                         //.PUT("/{category_id}", RequestPredicates.accept(APPLICATION_JSON), handler::update)
                         //.PATCH("/{category_id}", RequestPredicates.accept(APPLICATION_JSON), handler::patch)
-                        //.DELETE("/{category_id}", handler::delete)
+                        .DELETE("/{channel_id}", handler::delete)
                 )
                 .build();
         return route;

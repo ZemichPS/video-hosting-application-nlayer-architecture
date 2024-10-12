@@ -78,13 +78,9 @@ public class UserRestHandler {
     }
 
     public ServerResponse delete(ServerRequest request) {
-        try {
             UUID userUuid = UUID.fromString(request.pathVariable("user_id"));
             userServiceFacade.deleteById(userUuid);
             return noContent().build();
-        } catch (UserNotFoundException e) {
-            return ServerResponse.notFound().build();
-        }
     }
 
     public ServerResponse findAll(ServerRequest request) {
