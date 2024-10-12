@@ -10,7 +10,6 @@ import org.hibernate.annotations.UuidGenerator;
 import java.util.*;
 
 @Entity
-@Table(schema = "app")
 @Getter
 @Setter
 @ToString(exclude = {"subscriptions"})
@@ -26,8 +25,7 @@ public class User {
     @Setter(AccessLevel.NONE)
     @OrderBy("name DESC")
     @ManyToMany(
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST},
-            mappedBy = "subscriptions"
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST}
     )
     @JoinTable(
             name = "user_channel",

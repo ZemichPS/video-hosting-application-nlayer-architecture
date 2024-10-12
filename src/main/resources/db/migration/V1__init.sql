@@ -1,7 +1,6 @@
-
-DROP TABLE IF EXISTS app.category;
 DROP TABLE IF EXISTS app.user_channel;
-DROP TABLE IF EXISTS app.channel;
+DROP TABLE IF EXISTS app.category CASCADE;
+DROP TABLE IF EXISTS app.channel CASCADE;
 DROP TABLE IF EXISTS app.user;
 
 CREATE TABLE app.user
@@ -10,7 +9,8 @@ CREATE TABLE app.user
     username VARCHAR(255),
     name     VARCHAR(255),
     email    VARCHAR(255),
-    CONSTRAINT pk_user PRIMARY KEY (id)
+    CONSTRAINT pk_user PRIMARY KEY (id),
+    CONSTRAINT unq_username UNIQUE (username)
 );
 
 CREATE TABLE app.category
@@ -25,13 +25,15 @@ CREATE TABLE app.channel
     id          UUID         NOT NULL,
     author_id   UUID         NOT NULL,
     category_id UUID         NOT NULL,
+    created_at TIMESTAMP NOT NULL ,
     name        VARCHAR(100) NOT NULL,
     description VARCHAR(255),
     language    VARCHAR(10)  NOT NULL,
     avatar      TEXT,
     CONSTRAINT pk_channel PRIMARY KEY (id),
     CONSTRAINT fk_channel_on_author FOREIGN KEY (author_id) REFERENCES app.user (id),
-    CONSTRAINT fk_channel_on_category FOREIGN KEY (category_id) REFERENCES app.category (id)
+    CONSTRAINT fk_channel_on_category FOREIGN KEY (category_id) REFERENCES app.category (id),
+    CONSTRAINT unq_channel_name UNIQUE (name)
 );
 
 

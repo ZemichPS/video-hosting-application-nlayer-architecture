@@ -607,7 +607,7 @@ import { GridFlowSelectionColumn } from "./vaadin-grid-flow-selection-column.js"
         grid.$connector.updateHierarchicalData = tryCatchWrapper(function (updatedItems) {
           let pagesToUpdate = [];
           // locate and updateById the items in cache
-          // find pages that need updating
+          // findById pages that need updating
           for (let i = 0; i < updatedItems.length; i++) {
             let cacheLocation = itemToCacheLocation(updatedItems[i]);
             if (cacheLocation) {

@@ -1,8 +1,8 @@
 package by.zemich.videohosting.service.mappers;
 
 import by.zemich.videohosting.dao.entities.User;
-import by.zemich.videohosting.models.dto.request.UserData;
-import by.zemich.videohosting.models.dto.response.UseRepresentation;
+import by.zemich.videohosting.core.models.dto.request.UserData;
+import by.zemich.videohosting.core.models.dto.response.UseRepresentation;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
@@ -13,8 +13,8 @@ public interface UserMapper {
 
     User userDataToNewUser(UserData userData);
 
-    User userDataToExistingUser(UserData userData, @MappingTarget User user);
+    void userDataToExistingUser(UserData userData, @MappingTarget User user);
 
-    UseRepresentation userToUserRepresentation(User user);
+    UseRepresentation toUserRepresentation(User user);
 
 }

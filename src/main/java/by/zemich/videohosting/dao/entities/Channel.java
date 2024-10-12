@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
-@Table(schema = "app")
 @Getter
 @Setter
 public class Channel {
@@ -55,5 +54,8 @@ public class Channel {
 
     public void removeSubscriber(User user) {
         subscribers.remove(user);
+    }
+    public void addAuthor(User author) {
+        this.author = author;
     }
 }
