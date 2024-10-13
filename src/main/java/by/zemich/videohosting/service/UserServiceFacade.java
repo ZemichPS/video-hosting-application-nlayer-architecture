@@ -45,6 +45,7 @@ public class UserServiceFacade {
                 ))
                 .flatMapMany(user -> Flux.fromIterable(user.getSubscriptions()))
                 .map(Channel::getTitle);
+
     }
 
     public Mono<UserCreated> create(UserCreate userCreate){

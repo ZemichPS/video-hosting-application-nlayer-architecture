@@ -1,0 +1,8 @@
+CREATE TABLE users(
+    id UUID PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    name VARCHAR(150) NOT NULL,
+    email VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+)
