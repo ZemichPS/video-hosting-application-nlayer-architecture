@@ -20,6 +20,7 @@ public class Channel {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
     @Setter(AccessLevel.NONE)
     private User author;
 
@@ -28,10 +29,10 @@ public class Channel {
     private Category category;
 
     @Setter(AccessLevel.NONE)
-    @ManyToMany
+    @ManyToMany(mappedBy = "subscriptions")
     private Set<User> subscribers = new HashSet<>();
 
-    private String title;
+    private String name;
 
     private String description;
 
@@ -41,7 +42,7 @@ public class Channel {
 
     private String language;
 
-    private String avatarFileName;
+    private String avatar;
 
     public void assignCategory(Category category) {
         this.category = category;
@@ -49,5 +50,13 @@ public class Channel {
 
     public void addSubscriber(User user) {
         subscribers.add(user);
+    }
+
+    public void removeSubscriber(User user) {
+        subscribers.remove(user);
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 }

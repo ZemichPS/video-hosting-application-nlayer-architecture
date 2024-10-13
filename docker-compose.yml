@@ -1,10 +1,12 @@
-version: '3.1'
+version: "3.9"
 
 services:
   db:
-      image: postgres
-      ports:
-        - "5450:5432"
-      restart: always
-      entrypoint:
-        POSTGRES_PASSWORD: changemeinprod
+    image: postgres
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+

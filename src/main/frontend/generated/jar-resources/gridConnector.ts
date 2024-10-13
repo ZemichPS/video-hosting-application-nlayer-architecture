@@ -493,7 +493,7 @@ import { GridFlowSelectionColumn } from "./vaadin-grid-flow-selection-column.js"
         /**
          * Updates the cache for the given page for grid or tree-grid.
          *
-         * @param page index of the page to update
+         * @param page index of the page to updateById
          * @param parentKey the key of the parent item for the page
          * @returns an array of the updated items for the page, or undefined if no items were cached for the page
          */
@@ -505,7 +505,7 @@ import { GridFlowSelectionColumn } from "./vaadin-grid-flow-selection-column.js"
             ? dataProviderController.rootCache
             : dataProviderController.getItemSubCache(parentItem);
 
-          // Force update unless there's a callback waiting
+          // Force updateById unless there's a callback waiting
           if (gridCache && !gridCache.pendingRequests[page]) {
             // Update the items in the grid cache or set an array of undefined items
             // to remove the page from the grid cache if there are no corresponding items
@@ -535,7 +535,7 @@ import { GridFlowSelectionColumn } from "./vaadin-grid-flow-selection-column.js"
         /**
          * Update the given items in DOM if currently visible.
          *
-         * @param array items the items to update in DOM
+         * @param array items the items to updateById in DOM
          */
         const updateGridItemsInDomBasedOnCache = function (items) {
           if (!items || !grid.$ || grid.$.items.childElementCount === 0) {
@@ -561,7 +561,7 @@ import { GridFlowSelectionColumn } from "./vaadin-grid-flow-selection-column.js"
           const firstPage = index / grid.pageSize;
           const updatedPageCount = Math.ceil(items.length / grid.pageSize);
 
-          // For root cache, remember the range of pages that were set during an update
+          // For root cache, remember the range of pages that were set during an updateById
           if (pkey === root) {
             currentUpdateSetRange = [firstPage, firstPage + updatedPageCount - 1];
           }
@@ -606,8 +606,8 @@ import { GridFlowSelectionColumn } from "./vaadin-grid-flow-selection-column.js"
          */
         grid.$connector.updateHierarchicalData = tryCatchWrapper(function (updatedItems) {
           let pagesToUpdate = [];
-          // locate and update the items in cache
-          // find pages that need updating
+          // locate and updateById the items in cache
+          // findById pages that need updating
           for (let i = 0; i < updatedItems.length; i++) {
             let cacheLocation = itemToCacheLocation(updatedItems[i]);
             if (cacheLocation) {
@@ -639,14 +639,14 @@ import { GridFlowSelectionColumn } from "./vaadin-grid-flow-selection-column.js"
          * @param updatedItems the updated items array
          */
         grid.$connector.updateFlatData = tryCatchWrapper(function (updatedItems) {
-          // update (flat) caches
+          // updateById (flat) caches
           for (let i = 0; i < updatedItems.length; i++) {
             let cacheLocation = itemToCacheLocation(updatedItems[i]);
             if (cacheLocation) {
-              // update connector cache
+              // updateById connector cache
               cache[cacheLocation.parentKey][cacheLocation.page][cacheLocation.index] = updatedItems[i];
 
-              // update grid's cache
+              // updateById grid's cache
               const index = parseInt(cacheLocation.page) * grid.pageSize + parseInt(cacheLocation.index);
               const { rootCache } = dataProviderController;
               if (rootCache.items[index]) {
@@ -685,7 +685,7 @@ import { GridFlowSelectionColumn } from "./vaadin-grid-flow-selection-column.js"
           const numClearedPages = currentUpdateClearRange[1] - currentUpdateClearRange[0] + 1;
           const clearedPages = Array.from({ length: numClearedPages }, (_, i) => currentUpdateClearRange[0] + i);
 
-          // Remove pages that have been set in same update
+          // Remove pages that have been set in same updateById
           if (currentUpdateSetRange) {
             const [first, last] = currentUpdateSetRange;
             for (let page = first; page <= last; page++) {
@@ -717,7 +717,7 @@ import { GridFlowSelectionColumn } from "./vaadin-grid-flow-selection-column.js"
           let firstPage = Math.floor(index / grid.pageSize);
           let updatedPageCount = Math.ceil(length / grid.pageSize);
 
-          // For root cache, remember the range of pages that were cleared during an update
+          // For root cache, remember the range of pages that were cleared during an updateById
           if (pkey === root) {
             currentUpdateClearRange = [firstPage, firstPage + updatedPageCount - 1];
           }
@@ -814,7 +814,7 @@ import { GridFlowSelectionColumn } from "./vaadin-grid-flow-selection-column.js"
           const parentItemSubCache = dataProviderController.getItemSubCache(parentItem);
           if (parentItemSubCache) {
             // If grid has pending requests for this parent, then resolve them
-            // and let grid update the flat size and re-render.
+            // and let grid updateById the flat size and re-render.
             const { pendingRequests } = parentItemSubCache;
             Object.entries(pendingRequests).forEach(([page, callback]) => {
               let lastRequestedRange = lastRequestedRanges[parentKey] || [0, 0];
@@ -833,12 +833,12 @@ import { GridFlowSelectionColumn } from "./vaadin-grid-flow-selection-column.js"
             });
 
             // If size has changed, and there are no pending requests, then
-            // manually update the size of the grid cache and update the effective
+            // manually updateById the size of the grid cache and updateById the effective
             // size, effectively re-rendering the grid. This is necessary when
             // individual items are refreshed on the server, in which case there
             // is no loading request from the grid itself. In that case, if
             // children were added or removed, the grid will not be aware of it
-            // unless we manually update the size.
+            // unless we manually updateById the size.
             if (hasSizeChanged && Object.keys(pendingRequests).length === 0) {
               parentItemSubCache.size = levelSize;
               updateGridFlatSize();
@@ -865,7 +865,7 @@ import { GridFlowSelectionColumn } from "./vaadin-grid-flow-selection-column.js"
             } else if (page < lastRequestedRange[0] || +page > lastRequestedRangeEnd) {
               // No cached data, resolve the callback with an empty array
               callback(new Array(grid.pageSize));
-              // Request grid for content update
+              // Request grid for content updateById
               grid.requestContentUpdate();
             } else if (callback && grid.size === 0) {
               // The grid has 0 items => resolve the callback with an empty array
@@ -875,7 +875,7 @@ import { GridFlowSelectionColumn } from "./vaadin-grid-flow-selection-column.js"
 
           // Sanitize last requested range for the root level
           sanitizeLastRequestedRange();
-          // Clear current update state
+          // Clear current updateById state
           currentUpdateSetRange = null;
           currentUpdateClearRange = null;
 
