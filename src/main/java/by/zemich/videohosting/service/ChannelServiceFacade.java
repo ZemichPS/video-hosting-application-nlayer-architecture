@@ -10,9 +10,9 @@ import by.zemich.videohosting.core.models.dto.response.SubscriberShortRepresenta
 import by.zemich.videohosting.dao.entities.Category;
 import by.zemich.videohosting.dao.entities.Channel;
 import by.zemich.videohosting.dao.entities.User;
+import by.zemich.videohosting.service.api.CategoryCrudService;
 import by.zemich.videohosting.service.api.ChannelCrudService;
 import by.zemich.videohosting.service.api.UserCrudService;
-import by.zemich.videohosting.service.crud.CategoryCrudService;
 import by.zemich.videohosting.service.mappers.ChannelMapper;
 import by.zemich.videohosting.service.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;

@@ -4,7 +4,7 @@ import by.zemich.videohosting.dao.entities.Category;
 import by.zemich.videohosting.core.models.dto.request.CategoryData;
 import by.zemich.videohosting.core.models.dto.response.CategoryShortRepresentation;
 import by.zemich.videohosting.core.exceptions.CategoryNotFoundException;
-import by.zemich.videohosting.service.crud.CategoryCrudService;
+import by.zemich.videohosting.service.api.CategoryCrudService;
 import by.zemich.videohosting.service.mappers.CategoryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

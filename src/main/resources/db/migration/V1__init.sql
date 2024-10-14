@@ -1,9 +1,4 @@
-DROP TABLE IF EXISTS app.user_channel;
-DROP TABLE IF EXISTS app.category CASCADE;
-DROP TABLE IF EXISTS app.channel CASCADE;
-DROP TABLE IF EXISTS app.user;
-
-CREATE SCHEMA IF NOT EXISTS app;
+CREATE SCHEMA app;
 
 CREATE TABLE app.user
 (
@@ -43,14 +38,13 @@ CREATE TABLE app.user_channel
 (
     user_id    UUID NOT NULL,
     channel_id UUID NOT NULL,
-    CONSTRAINT pk_user_channel PRIMARY KEY (user_id, channel_id)
+    CONSTRAINT pk_user_channel PRIMARY KEY (user_id, channel_id),
+    CONSTRAINT fk_userchannel_on_channel FOREIGN KEY (channel_id) REFERENCES app.channel (id),
+    CONSTRAINT fk_userchannel_on_user FOREIGN KEY (user_id) REFERENCES app.user (id)
 );
 
-ALTER TABLE app.user_channel
-    ADD CONSTRAINT fk_userchannel_on_channel FOREIGN KEY (channel_id) REFERENCES app.channel (id);
 
-ALTER TABLE app.user_channel
-    ADD CONSTRAINT fk_userchannel_on_user FOREIGN KEY (user_id) REFERENCES app.user (id);
+
 
 
 

@@ -21,63 +21,81 @@ public class RoutingConfiguration {
 
     private final ExceptionHandlerHolder exceptionHandlerHolder;
 
+
     @Bean
     RouterFunction<ServerResponse> route(UserRestHandler userRestHandler,
                                          CategoryHandler categoryHandler,
                                          ChannelHandler channelHandler) {
-        return RouterFunctions.route()
-                .add(usersRoute(userRestHandler))
-                .add(categoryRoute(categoryHandler))
-                .add(channelRoute(channelHandler))
-                .onError(Throwable.class, (throwable, request) -> exceptionHandlerHolder.handle(throwable))
-                .build();
+
+        return RouterFunctions.nest(
+                RequestPredicates.path("api/v1").and(RequestPredicates.accept(APPLICATION_JSON)),
+                RouterFunctions.route()
+                        .add(usersRoute(userRestHandler))
+                        .add(categoryRoute(categoryHandler))
+                        .add(channelRoute(channelHandler))
+                        .onError(Throwable.class, exceptionHandlerHolder::handle)
+                        .build());
     }
 
     RouterFunction<ServerResponse> usersRoute(UserRestHandler handler) {
-        RouterFunction<ServerResponse> route = RouterFunctions.route()
-                .path("api/v1/users", builder1 -> builder1
-                        .POST(RequestPredicates.accept(APPLICATION_JSON), handler::create)
-                        .GET("/{user_id}", handler::findById)
-                        .PUT("/{user_id}", RequestPredicates.accept(APPLICATION_JSON), handler::update)
-                        .PATCH("/{user_id}", RequestPredicates.accept(APPLICATION_JSON), handler::patch)
-                        .DELETE("/{user_id}", handler::delete)
-                        .GET("/{user_id}/channels", handler::findAll)
-                        .POST("/{user_id}/channels/{channel_id}", handler::subscribe)
-                        .DELETE("/{user_id}/channels/{channel_id}", handler::unsubscribe)
-                )
-                .build();
-        return route;
+        return RouterFunctions.nest(
+                RequestPredicates.path("/users"), RouterFunctions.route()
+                        .nest(RequestPredicates.path("/{user_id}/channels/{channel_id}"),
+                                r1 -> r1
+                                        .POST(handler::subscribe)
+                                        .DELETE(handler::unsubscribe)
+                                        .build()
+                        )
+                        .nest(RequestPredicates.path("/{user_id}/channels"),
+                                r2 -> r2
+                                        .GET( handler::findAll)
+                                        .build()
+                        )
+                        .nest(RequestPredicates.path("/{user_id}"),
+                                r3 -> r3
+                                        .GET(handler::findById)
+                                        .PUT(handler::update)
+                                        .PATCH(handler::patch)
+                                        .DELETE(handler::delete)
+                                        .build()
+                        )
+                        .POST(handler::create)
+                        .build()
+        );
     }
 
     RouterFunction<ServerResponse> categoryRoute(CategoryHandler handler) {
-        RouterFunction<ServerResponse> route = RouterFunctions.route()
-                .path("api/v1/categories", builder1 -> builder1
-                        .POST(RequestPredicates.accept(APPLICATION_JSON), handler::create)
-                        .GET("/{category_id}", handler::findById)
-                        .PUT("/{category_id}", RequestPredicates.accept(APPLICATION_JSON), handler::update)
-                        .PATCH("/{category_id}", RequestPredicates.accept(APPLICATION_JSON), handler::patch)
-                        .DELETE("/{category_id}", handler::delete)
-                )
-                .build();
-        return route;
+        return RouterFunctions.nest(
+                RequestPredicates.path("/category"), RouterFunctions.route()
+                        .nest(RequestPredicates.path("/{category_id}"),
+                                r1 -> r1
+                                        .GET(handler::findById)
+                                        .PUT(handler::update)
+                                        .PATCH(handler::patch)
+                                        .DELETE(handler::delete)
+                                        .build()
+                        )
+                        .POST(handler::create)
+                        .build()
+        );
     }
 
     RouterFunction<ServerResponse> channelRoute(ChannelHandler handler) {
-        RouterFunction<ServerResponse> route = RouterFunctions.nest(RequestPredicates.path("api/v1/channels"),
-                        RouterFunctions.route()
-                                .POST(RequestPredicates.accept(APPLICATION_JSON), handler::create)
-                                .GET( handler::getPage)
-                                .GET("/{category_id}", handler::findById)
-                                .PUT("/{category_id}", RequestPredicates.accept(APPLICATION_JSON), handler::update)
-                                .PATCH("/{category_id}", RequestPredicates.accept(APPLICATION_JSON), handler::patch)
-                                .DELETE("/{channel_id}", handler::delete)
-                                .GET("/{channel_id}/subscribers", handler::findSubscribers)
-                                .build()
-                );
-        return route;
+        return RouterFunctions.nest(
+                RequestPredicates.path("/channels"), RouterFunctions.route()
+                        .GET("/{channel_id}/subscribers", handler::findSubscribers)
+                        .nest(
+                                RequestPredicates.path("/{channel_id}"),
+                                r1 -> r1.GET(handler::findById)
+                                        .PUT(handler::update)
+                                        .PATCH(handler::patch)
+                                        .DELETE(handler::delete)
+                                        .build()
+                        )
+                        .POST(handler::create)
+                        .GET(handler::getPage)
+                        .build()
+        );
     }
-
-
-
 
 }

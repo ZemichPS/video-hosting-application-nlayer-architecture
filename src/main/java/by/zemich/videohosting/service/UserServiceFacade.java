@@ -1,5 +1,6 @@
 package by.zemich.videohosting.service;
 
+import by.zemich.videohosting.core.exceptions.UserWithSuchUsernameAlreadyExists;
 import by.zemich.videohosting.dao.entities.User;
 import by.zemich.videohosting.core.models.dto.request.UserData;
 import by.zemich.videohosting.core.models.dto.response.ChannelShortRepresentation;
@@ -30,7 +31,8 @@ public class UserServiceFacade {
         return userCrudService.findById(userId).map(
                 user -> channelService.findById(channelId).map(channel -> {
                     user.subscribe(channel);
-                    log.info("User was subscribed to channel", user);
+                    userCrudService.save(user);
+                    log.info("User was subscribed to channel {}", user);
                     return UserMapper.INSTANCE.toUserRepresentation(user);
                 }).orElseThrow(() -> new ChannelNotFoundException("Channel with id: % is nowhere to be found".formatted(channelId)))
         ).orElseThrow(() -> new UserNotFoundException("User with id: %s is nowhere to be found".formatted(userId)));
@@ -43,11 +45,14 @@ public class UserServiceFacade {
                                 channel -> {
                                     user.unsubscribe(channel);
                                     log.info("User was unsubscribed to channel", user);
+                                    userCrudService.save(user);
                                 }, () -> new UserNotFoundException("Channel with id: % is nowhere to be found".formatted(channelId))
                         ), () -> new UserNotFoundException("User with id: %s is nowhere to be found".formatted(userId)));
     }
 
     public UseRepresentation create(UserData userData) {
+        String username = userData.getUsername();
+        if (userCrudService.existsByUsername(username)) throw new UserWithSuchUsernameAlreadyExists(username);
         User mewUser = UserMapper.INSTANCE.userDataToNewUser(userData);
         User savedUser = userCrudService.save(mewUser);
         return UserMapper.INSTANCE.toUserRepresentation(savedUser);

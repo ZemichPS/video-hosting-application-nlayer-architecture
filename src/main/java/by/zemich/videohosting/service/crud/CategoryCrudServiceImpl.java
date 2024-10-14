@@ -2,6 +2,8 @@ package by.zemich.videohosting.service.crud;
 
 import by.zemich.videohosting.dao.entities.Category;
 import by.zemich.videohosting.dao.repositories.CategoryRepository;
+import by.zemich.videohosting.service.api.CategoryCrudService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,18 +12,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class CategoryCrudService {
+@RequiredArgsConstructor
+public class CategoryCrudServiceImpl implements CategoryCrudService {
     private final CategoryRepository categoryRepository;
-
-    public CategoryCrudService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
 
     @Transactional(readOnly = true)
     public List<Category> findAll() {
         return categoryRepository.findAll();
     }
-
 
     public Optional<Category> findById(UUID id) {
         return categoryRepository.findById(id);

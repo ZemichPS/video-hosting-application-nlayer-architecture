@@ -38,4 +38,8 @@ public class UserCrudServiceImpl implements UserCrudService {
         return userRepository.existsById(userId);
     }
 
+    @Override
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
 }

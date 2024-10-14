@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -43,7 +44,7 @@ public class ChannelHandler {
 
     public ServerResponse create(ServerRequest request) throws ServletException, IOException {
         ChannelData channelData = request.body(ChannelData.class);
-        //   validation.validate(channelData);
+        validation.validate(channelData);
         ChannelFullRepresentation representation = channelServiceFacade.create(channelData);
         URI location = URI.create(request.path() + "/" + representation.getId());
         return created(location).contentType(MediaType.APPLICATION_JSON).body(representation);
@@ -63,7 +64,7 @@ public class ChannelHandler {
 
     public ServerResponse update(ServerRequest request) throws ServletException, IOException {
         ChannelData channelData = request.body(ChannelData.class);
-        //   validation.validate(channelData);
+        validation.validate(channelData);
         UUID channelId = UUID.fromString(request.pathVariable("channel_id"));
         ChannelFullRepresentation representation = channelServiceFacade.update(channelData, channelId);
         return ok().contentType(MediaType.APPLICATION_JSON).body(representation);
@@ -97,8 +98,8 @@ public class ChannelHandler {
     }
 
     private PageRequest createPageRequestFromRequestParams(ServerRequest request){
-        Integer pageNumber = request.param("pageNumber").map(Integer::getInteger).orElse(0);
-        Integer size = request.param("size").map(Integer::getInteger).orElse(10);
+        Integer pageNumber = request.param("page").map(Integer::valueOf).orElse(0);
+        Integer size = request.param("size").map(Integer::valueOf).orElse(10);
         Sort sort = request.param("sort")
                 .map(sortParam -> Sort.by(sortParam).ascending())
                 .orElse(Sort.by("name").descending());
