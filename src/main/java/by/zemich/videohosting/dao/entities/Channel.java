@@ -36,7 +36,7 @@ public class Channel {
 
     private String description;
 
-    @CreationTimestamp(source = SourceType.VM)
+    @CreationTimestamp()
     @Setter(AccessLevel.NONE)
     private LocalDateTime createdAt;
 
